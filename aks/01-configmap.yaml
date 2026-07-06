@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: robotshop-config
+  namespace: robot-shop
+data:
+  PAYMENT_GATEWAY: "https://www.paypal.com/"
+  MONGO_CATALOGUE_URL: "mongodb://mongodb:27017/catalogue"
+  MONGO_USER_URL: "mongodb://mongodb:27017/users"
+  REDIS_HOST: "redis"
+  CATALOGUE_HOST: "catalogue"
+  USER_HOST: "user"
+  CART_HOST: "cart"
+  SHIPPING_HOST: "shipping"
+  PAYMENT_HOST: "payment"
+  RATINGS_HOST: "ratings"
+  CART_ENDPOINT: "cart:8080"
+  DB_HOST: "mysql"
+  AMQP_HOST: "rabbitmq"
+  CATALOGUE_URL: "http://catalogue:8080"
