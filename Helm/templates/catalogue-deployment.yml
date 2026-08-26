@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue-deployment
+  namespace: helm
+  labels:
+    app: catalogue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalogue
+  template:
+    metadata:
+      labels:
+        app: catalogue
+    spec:
+      containers:
+        - name: catalogue-container
+          image: "{{ .Values.catalogue.image.repository }}:{{ .Values.catalogue.image.tag }}"
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongodb-service:27017/catalogue
+                
+        

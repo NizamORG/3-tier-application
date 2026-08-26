@@ -1,0 +1,173 @@
+services:
+  mongodb:
+    build:
+      context: ./mongo
+    image: roboshop/rs-mongodb
+    container_name: robo-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - roboshop-network
+  mysql:
+    build:
+      context: ./mysql
+    image: roboshop/rs-mysql
+    container_name: robo-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - roboshop-network
+  redis:
+    image: redis:6.2-alpine
+    container_name: robo-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - roboshop-network
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: robo-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - roboshop-network
+  cart:
+    build:
+      context: ./cart
+    container_name: robo-cart
+    image: roboshop/rs-cart
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      CATALOGUE_HOST: catalogue
+    networks:
+      - roboshop-network
+  catalogue:
+    build:
+      context: ./catalogue
+    container_name: robo-catalogue
+    image: roboshop/rs-catalogue
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/catalogue
+    networks:
+      - roboshop-network
+  dispatch:
+    build:
+      context: ./dispatch
+      dockerfile: Dockerfile
+    container_name: robo-dispatch
+    image: roboshop/rs-dispatch
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+    environment:
+      AMQP_HOST: rabbitmq
+    networks:
+      - roboshop-network
+  payment:
+    build:
+      context: ./payment
+    container_name: robo-payment
+    image: roboshop/rs-payment
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+      - cart
+      - user
+    environment:
+      CART_HOST: cart
+      USER_HOST: user
+      AMQP_HOST: rabbitmq
+      PAYMENT_GATEWAY: https://www.paypal.com/
+    networks:
+      - roboshop-network
+  ratings:
+    build:
+      context: ./ratings
+    container_name: robo-ratings
+    image: roboshop/rs-ratings
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      APP_ENV: prod
+    networks:
+      - roboshop-network
+  shipping:
+    build:
+      context: ./shipping
+    container_name: robo-shipping
+    image: roboshop/rs-shipping
+    restart: unless-stopped
+    depends_on:
+      - mysql
+      - cart
+    environment:
+      CART_ENDPOINT: cart:8080
+      DB_HOST: mysql
+    networks:
+      - roboshop-network
+  user:
+    build:
+      context: ./user
+    container_name: robo-user
+    image: roboshop/rs-user
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      MONGO_URL: mongodb://mongodb:27017/user
+      REDIS_HOST: redis
+    networks:
+      - roboshop-network
+  web:
+    build:
+      context: ./web
+    container_name: robo-web
+    image: roboshop/rs-web
+    restart: unless-stopped
+    depends_on:
+      - catalogue
+      - user
+      - cart
+      - shipping
+      - payment
+      - dispatch
+      - ratings
+    environment:
+      CATALOGUE_HOST: catalogue
+      USER_HOST: user
+      CART_HOST: cart
+      SHIPPING_HOST: shipping
+      PAYMENT_HOST: payment
+      DISPATCH_HOST: dispatch
+      RATING_HOST: ratings
+    ports:
+      - "8080:8080"
+    networks:
+      - roboshop-network
+
+networks:
+  roboshop-network:
+    driver: bridge
+volumes:
+  mongodb-data:
+  redis-data:
+  mysql-data:

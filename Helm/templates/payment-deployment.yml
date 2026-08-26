@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-deployment
+  namespace: helm
+  labels:
+    app: payment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+        - name: payment-container
+          image: "{{ .Values.payment.image.repository }}:{{ .Values.payment.image.tag }}"
+          env:
+            - name: CART_HOST
+              value: cart-service
+            - name: USER_HOST
+              value: user-service
+            - name: AMQP_HOST
+              value: rabbitmq-service
+            - name: PAYMENT_GATEWAY
+              value: "https://www.paypal.com/"
+             
+          

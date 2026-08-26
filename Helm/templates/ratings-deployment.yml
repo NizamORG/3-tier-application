@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ratings-deployment
+  namespace: helm
+  labels:
+    app: ratings
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ratings
+  template:
+    metadata:
+      labels:
+        app: ratings
+    spec:
+      containers:
+        - name: ratings-container
+          image: "{{ .Values.ratings.image.repository }}:{{ .Values.ratings.image.tag }}"
+          env:
+            - name: APP_ENV
+              value: prod
+             
+          

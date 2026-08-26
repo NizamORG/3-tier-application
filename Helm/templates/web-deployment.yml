@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  namespace: helm
+  labels:
+    app: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web-container
+          image: "{{ .Values.web.image.repository }}:{{ .Values.web.image.tag }}"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CATALOGUE_HOST
+              value: catalogue-service
+            - name: USER_HOST
+              value: user-service
+            - name: CART_HOST
+              value: cart-service
+            - name: SHIPPING_HOST
+              value: shipping-service
+            - name: PAYMENT_HOST
+              value: payment-service
+            - name: DISPATCH_HOST
+              value: dispatch-service
+            - name: RATINGS_HOST
+              value: ratings-service
+             
+          

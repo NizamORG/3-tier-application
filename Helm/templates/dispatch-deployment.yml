@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dispatch-deployment
+  namespace: helm
+  labels:
+    app: dispatch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dispatch
+  template:
+    metadata:
+      labels:
+        app: dispatch
+    spec:
+      containers:
+        - name: dispatch-container
+          image: "{{ .Values.dispatch.image.repository }}:{{ .Values.dispatch.image.tag }}"
+          env:
+            - name: AMQP_HOST
+              value: rabbitmq-service
+            
+        

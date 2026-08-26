@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-deployment
+  namespace: helm
+  labels:
+    app: shipping
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping
+  template:
+    metadata:
+      labels:
+        app: shipping
+    spec:
+      containers:
+        - name: shipping-container
+          image: "{{ .Values.shipping.image.repository }}:{{ .Values.shipping.image.tag }}"
+          env:
+            - name: CART_ENDPOINT
+              value: cart-service:8080
+            - name: DB_HOST
+              value: mysql-service
+            
+        

@@ -3,4 +3,4 @@
 *-private.*
 vendor/
 Gopkg.lock
-docker-compose.yaml
+Helm optimize/*

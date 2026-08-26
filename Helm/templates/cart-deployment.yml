@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-deployment
+  namespace: helm
+  labels:
+    app: cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart
+  template:
+    metadata:
+      labels:
+        app: cart
+    spec:
+      containers:
+        - name: cart-container
+          image: "{{ .Values.cart.image.repository }}:{{ .Values.cart.image.tag }}"
+          env:
+            - name: REDIS_HOST
+              value: redis-service
+            - name: CATALOGUE_HOST
+              value: catalogue-service
+            
+        

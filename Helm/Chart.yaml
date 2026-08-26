@@ -1,0 +1,6 @@
+apiVersion: v2
+name: roboshop-app
+description: A Helm chart for deploying the Roboshop application
+type: application
+version: 2.0.0
+appVersion: 2.0.0

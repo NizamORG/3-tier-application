@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  namespace: helm
+  labels:
+    app: user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      containers:
+        - name: user-container
+          image: "{{ .Values.user.image.repository }}:{{ .Values.user.image.tag }}"
+          env:
+            - name: MONGO_URL
+              value: mongodb://mongodb-service:27017/user
+            - name: REDIS_HOST
+              value: redis-service
+            
+        

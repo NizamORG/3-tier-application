@@ -1,0 +1,71 @@
+web:
+  image:
+    repository: nizam799/roboshop-web
+    tag: v1
+    pullpolicy: IfNotPresent
+
+user:
+  image:
+    repository: nizam799/roboshop-user
+    tag: v1
+    pullpolicy: IfNotPresent
+
+shipping:
+  image:
+    repository: nizam799/roboshop-shipping
+    tag: v1
+    pullpolicy: IfNotPresent
+
+ratings:
+  image:
+    repository: nizam799/roboshop-ratings
+    tag: v1
+    pullpolicy: IfNotPresent
+
+payment:
+  image:
+    repository: nizam799/roboshop-payment
+    tag: v1
+    pullpolicy: IfNotPresent
+
+mysql:
+  image:
+    repository: nizam799/roboshop-mysql
+    tag: v1
+    pullpolicy: IfNotPresent
+
+mongodb:
+  image:
+    repository: nizam799/roboshop-mongodb
+    tag: v1
+    pullpolicy: IfNotPresent
+
+dispatch:
+  image:
+    repository: nizam799/roboshop-dispatch
+    tag: v1
+    pullpolicy: IfNotPresent
+
+cart:
+  image:
+    repository: nizam799/roboshop-cart
+    tag: v1
+    pullpolicy: IfNotPresent
+
+catalogue:
+  image:
+    repository: nizam799/roboshop-catalogue
+    tag: v1
+    pullpolicy: IfNotPresent
+
+redis:
+  image:
+    repository: redis
+    tag: 6.2-alpine
+    pullpolicy: IfNotPresent
+
+rabbitmq:
+  image:
+    repository: rabbitmq
+    tag: 3.8-management-alpine
+    pullpolicy: IfNotPresent
