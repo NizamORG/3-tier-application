@@ -1,0 +1,17 @@
+{{- range $name, $component := .Values.components }}
+{{- if $component.volume }}
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $name }}-pvc
+  namespace: {{ $.Release.Namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+{{- end }}
+{{- end }}

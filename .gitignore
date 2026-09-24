@@ -3,4 +3,3 @@
 *-private.*
 vendor/
 Gopkg.lock
-Helm optimize/*

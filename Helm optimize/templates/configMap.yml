@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: roboshop-configmap
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: roboshop-configmap
+data:
+  AMQP_HOST: rabbitmq-svc
+  APP_ENV: prod
+  CART_ENDPOINT: cart-svc:8080
+  CART_HOST: cart-svc
+  CATALOGUE_HOST: catalogue-svc
+  DB_HOST: mysql-svc
+  MONGO_URL: mongodb://mongodb-svc:27017/catalogue
+  PAYMENT_GATEWAY: https://www.paypal.com/
+  PAYMENT_HOST: payment-svc
+  RATINGS_HOST: ratings-svc
+  REDIS_HOST: redis-svc
+  SHIPPING_HOST: shipping-svc
+  USER_HOST: user-svc

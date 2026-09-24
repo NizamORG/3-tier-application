@@ -1,0 +1,50 @@
+{{- range $name, $component := .Values.components }}
+{{- if $component.image }}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}-deployment
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $name }}-deploy
+spec:
+  replicas: {{ $component.replicas | default 1 }}
+
+  selector:
+    matchLabels:
+      app: {{ $name }}-pod
+  template:
+    metadata:
+      labels:
+        app: {{ $name }}-pod
+    spec:
+      containers:
+        - name: {{ $name }}-container
+          image: "{{ $component.image.repository}}:{{ $component.image.tag}}"
+          imagePullPolicy: {{ $component.image.pullpolicy | default "IfNotPresent" }}
+          envFrom:
+            - configMapRef:
+                name: roboshop-configmap
+          {{- if $component.ports }}
+          ports:
+            {{- range $index, $port := $component.ports }}
+            - name: {{ $port.name | default (printf "port-%d" $index) }}
+              containerPort: {{ $port.targetport }}  
+            {{- end }}
+          {{- end }}
+          {{- if $component.volume }}
+          volumeMounts:
+            - name: {{ $name }}-volume
+              mountPath: {{ $component.volume.path }}
+          {{- end }}
+      {{- if $component.volume }}
+      volumes:
+        - name: {{ $name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ $name }}-pvc
+      {{- end }}
+---
+{{- end }}
+{{- end }}
+    

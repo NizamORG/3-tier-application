@@ -1,0 +1,142 @@
+components:
+  cart:
+    replicas: 1
+    image:
+      repository: nizam799/roboshop-cart
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+    
+  web:
+    image:
+      repository: nizam799/roboshop-web
+      tag: v1 
+      pullpolicy: IfNotPresent
+    service:
+      type: LoadBalancer
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  user:
+    image:
+      repository: nizam799/roboshop-user
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  shipping:
+    image:
+      repository: nizam799/roboshop-shipping
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  ratings:
+    image:
+      repository: nizam799/roboshop-ratings
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 80
+        targetport: 8080
+
+  payment:
+    image:
+      repository: nizam799/roboshop-payment
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  mysql:
+    image:
+      repository: nizam799/roboshop-mysql
+      tag: v2
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 3306
+        targetport: 3306
+    volume:
+      path: /data
+
+  mongodb:
+    image:
+      repository: nizam799/roboshop-mongodb
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 27017
+        targetport: 27017
+    volume:
+      path: /data/db
+
+  dispatch:
+    image:
+      repository: nizam799/roboshop-dispatch
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  catalogue:
+    image:
+      repository: nizam799/roboshop-catalogue
+      tag: v1
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 8080
+        targetport: 8080
+
+  redis:
+    image:
+      repository: redis
+      tag: 6.2-alpine
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 6739
+        targetport: 6739
+    volume:
+      path: /data
+
+  rabbitmq:
+    image:
+      repository: rabbitmq
+      tag: 3.8-management-alpine
+      pullpolicy: IfNotPresent
+    service:
+      type: ClusterIP
+    ports:
+      - svcport: 5672
+        targetport: 5672
+      - svcport: 15672
+        targetport: 15672
+    

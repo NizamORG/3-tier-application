@@ -1,0 +1,24 @@
+{{- range $name, $component := .Values.components }}
+{{- if $component.service }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}-svc
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ $name }}-svc
+spec:
+  type: {{ $component.service.type | default "ClusterIP" }}
+  selector:
+    app: {{ $name }}-pod
+  ports:
+    {{- range $index, $port := $component.ports }}
+    - name: {{ $port.name | default (printf "port-%d" $index) }}
+      protocol: {{ $port.protocol | default "TCP" }}
+      port: {{ $port.svcport }}
+      targetPort: {{ $port.targetport }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}
